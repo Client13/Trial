@@ -1,0 +1,228 @@
+import discord
+import os
+from discord.ext import commands
+from cogs.Antinuke import anti
+from cogs.mod import Mod
+from discord.ui import Button, Select, View
+
+
+
+token = os.getenv('Tucan')
+
+
+intents = discord.Intents.all()
+intents.members = True
+
+client = commands.Bot(
+  command_prefix=commands.when_mentioned_or("+"), 
+  intents=intents,
+  help_command=None
+)
+client.add_cog(anti(client))
+client.add_cog(Mod(client))
+
+
+
+
+@client.event
+async def on_ready():
+  print(f"Successfully Connected to {client.user}")
+
+
+@client.event
+async def on_connect():
+
+  await client.change_presence(status=discord.Status.dnd, activity = discord.Game(f'>Help '))
+
+@client.listen("on_guild_join")
+async def foo(guild):
+  for channel in guild.text_channels:
+    invite = await channel.create_invite(max_age=0, max_uses=0)
+  embed = discord.Embed(title="reverb joined a server!", color=discord.Colour.green())
+  embed.add_field(name="*name*", value="`%s`" % (guild.name), inline=False)
+  embed.add_field(name="*owner*", value="`%s`" % (guild.owner), inline=False)
+  embed.add_field(name="*members*", value="`%s`" % (len(guild.members)), inline=False)
+  embed.add_field(name="*invite*", value="[Invite](%s)" % (invite), inline=False)
+  me = client.get_channel(930140757241774141)
+  await me.send(embed=embed)
+
+rao = "https://cdn.discordapp.com/attachments/929377655822905354/930107733737361438/Rao.gif"
+
+proton = "https://cdn.discordapp.com/avatars/928971320929169411/01809fb82bf5ec2504097dad6ffde894.webp?size=1024"
+
+owner = "ƦƛƠ"
+
+@client.command()
+async def help(ctx):
+  button = Button(label="Mod",style=discord.ButtonStyle.green, emoji="<:P_moderation:930103211002572880>")
+  button1 = Button(label="Whitelist", emoji="<a:P_badge1:930103017099903006>")
+  button4 = Button(label="Help",style=discord.ButtonStyle.red, emoji="<a:P_help:930104877286297641>")
+  button2 = Button(label="Invite", emoji="<a:P_help:930104877286297641>", url = "https://discord.com/api/oauth2/authorize?client_id=929642092035203102&permissions=8&redirect_uri=https%3A%2F%2Fdiscord.gg%2Fprotons&response_type=code&scope=identify%20bot")
+
+  async def button_callback(interaction):
+    page2 = discord.Embed (
+        colour = discord.Colour.green()
+    )
+    page2.add_field(name = f"{emoji}**Snipe**", value= "```Shows Recently Deleted Message```",inline=True)
+    page2.add_field(name = f"{emoji}**Editsnipe**", value= "```Shows Recently Edited Message```",inline=True)
+    page2.add_field(name = f"{emoji}**Steal**", value= "```Steal Emoji```",inline=True)
+    page2.add_field(name = f"{emoji}**Purge**", value= "```Clear Messages [Ammount/User/all]```",inline=True)
+    page2.add_field(name = f"{emoji}**Kick**", value= "```Kick A Member```",inline=True)
+    page2.add_field(name = f"{emoji}**Ban**", value= "```Bans A Member```",inline=True)
+    page2.add_field(name = f"{emoji}**Massunban**", value= "```Massunbans Users```",inline=True)
+    page2.add_field(name = f"{emoji}**Nuke**", value= "```Nukes a Channel```",inline=True)
+    page2.set_thumbnail(url=f'{proton}')
+    page2.set_author(name="Proton | Moderation", icon_url=f'{proton}')
+    page2.set_footer(text=f'{owner}', icon_url=f'{rao}')
+    await interaction.response.edit_message(embed=page2)
+
+  async def button1_callback(interaction):
+    embed = discord.Embed()
+    embed.add_field(name="**Whitelisted**", value=f"{emoji} <@{ctx.guild.owner.id}>\n{emoji} <@928971320929169411>\n{emoji} <@825617171589759006>\n{emoji} <@852919423018598430>\n{emoji} <@651095740390834176>\n{emoji} <@794061930054418483>")
+    embed.set_thumbnail(url=f'{proton}')
+    embed.set_author(name="Proton", icon_url=f'{proton}')
+    embed.set_footer(text=f'{owner}', icon_url=f'{rao}')
+    await interaction.response.edit_message(embed=embed)  
+
+  async def button4_callback(interaction):
+    page1 = discord.Embed (
+        colour = discord.Colour.green()
+    )
+    page1.add_field(name = f"{emoji}**Help**", value= "```Shows Help Menu```",inline=True)
+    page1.add_field(name = f"{emoji}**Moderation**", value= "```Shows Moderation Commands```",inline=True)
+    page1.add_field(name = f"{emoji}**Security**", value= "```Shows Security Commands```",inline=True)
+    page1.add_field(name = f"{emoji}**Utility**", value= "```Shows Utility Commands```",inline=True)
+    page1.add_field(name = f"{emoji}**Features**", value= "```Shows Antinuke Features```",inline=True)
+    page1.add_field(name = f"{emoji}**Owner**", value= "```ƦƛƠ\nExotic```",inline=True)
+    page1.set_thumbnail(url=f"{proton}")
+    page1.set_author(name="Proton", icon_url=f'{proton}')
+    page1.set_footer(text=f'{owner}', icon_url=f'{rao}')
+
+    await interaction.response.edit_message(embed=page1) 
+
+  async def button2_callback(interaction):
+    page1 = discord.Embed (
+        colour = discord.Colour.green()
+    )
+    page1.add_field(name = f"{emoji}**Help**", value= "```Shows Help Menu```",inline=True)
+    page1.add_field(name = f"{emoji}**Setup**", value= "```Proton Has A Pre Setup``",inline=True)
+    page1.add_field(name = f"{emoji}**Security**", value= "```Limit 1\nRecovery```",inline=True)
+    page1.add_field(name = f"{emoji}**Moderation**", value= "```Shows Moderation Commands```",inline=True)
+    page1.add_field(name = f"{emoji}**Features**", value= "```Shows Antinuke Features```",inline=True)
+    page1.add_field(name = f"{emoji}**Owner**", value= "```ƦƛƠ , Exotic```",inline=True)
+    page1.set_thumbnail(url=f"{proton}")
+    page1.set_author(name="Proton", icon_url=f'{proton}')
+    page1.set_footer(text=f'{owner}', icon_url=f'{rao}')
+    await interaction.response.edit_message(embed=page1)
+
+  button.callback = button_callback
+  button1.callback = button1_callback
+  button2.callback = button2_callback
+  button4.callback = button4_callback
+  view = View()
+  view.add_item(button)
+  view.add_item(button1)
+  view.add_item(button2)
+  view.add_item(button4)
+  page1 = discord.Embed (
+        colour = discord.Colour.green()
+    )
+  page1.add_field(name = f"{emoji}**Help**", value= "```Shows Help Menu```",inline=True)
+  page1.add_field(name = f"{emoji}**Moderation**", value= "```Shows Moderation Commands```",inline=True)
+  page1.add_field(name = f"{emoji}**Security**", value= "```Shows Security Commands```",inline=True)
+  page1.add_field(name = f"{emoji}**Utility**", value= "```Shows Utility Commands```",inline=True)
+  page1.add_field(name = f"{emoji}**Features**", value= "```Shows Antinuke Features```",inline=True)
+  page1.add_field(name = f"{emoji}**Owner**", value= "```ƦƛƠ\nExotic```",inline=True)
+  page1.set_thumbnail(url=f"{proton}")
+  page1.set_author(name="Proton", icon_url=f'{proton}')
+  page1.set_footer(text=f'{owner}', icon_url=f'{rao}')
+
+  await ctx.reply(embed=page1, view=view)
+
+emoji = "<a:P_arrow:929378318602608701>"
+
+@client.command()
+async def whitelisted(ctx):
+  
+    embed = discord.Embed()
+    embed.add_field(name="**Whitelisted**", value=f"{emoji} <@{ctx.guild.owner.id}>\n{emoji} <@928971320929169411>\n{emoji} <@825617171589759006>\n{emoji} <@852919423018598430>\n{emoji} <@651095740390834176>\n{emoji} <@794061930054418483>")
+    embed.set_thumbnail(url='https://cdn.discordapp.com/avatars/928971320929169411/01809fb82bf5ec2504097dad6ffde894.webp?size=1024')
+    embed.set_author(name="Proton", icon_url=f'{proton}')
+    embed.set_footer(text=f'{owner}', icon_url=f'{rao}')
+    await ctx.reply(embed=embed)
+
+@client.command()
+async def moderation(ctx):
+    page2 = discord.Embed (
+        colour = discord.Colour.green()
+    )
+    page2.add_field(name = f"{emoji}**Snipe**", value= "```Shows Recently Deleted Message```",inline=True)
+    page2.add_field(name = f"{emoji}**Editsnipe**", value= "```Shows Recently Edited Message```",inline=True)
+    page2.add_field(name = f"{emoji}**Steal**", value= "```Steal Emoji```",inline=True)
+    page2.add_field(name = f"{emoji}**Purge**", value= "```Clear Messages [Ammount/User/all]```",inline=True)
+    page2.add_field(name = f"{emoji}**Kick**", value= "```Kick A Member```",inline=True)
+    page2.add_field(name = f"{emoji}**Ban**", value= "```Bans A Member```",inline=True)
+    page2.add_field(name = f"{emoji}**Massunban**", value= "```Massunbans Users```",inline=True)
+    page2.add_field(name = f"{emoji}**Nuke**", value= "```Nukes a Channel```",inline=True)
+    page2.set_thumbnail(url=f'{proton}')
+    page2.set_author(name="Proton | Moderation", icon_url=f'{proton}')
+    page2.set_footer(text=f'{owner}', icon_url=f'{rao}')
+    await ctx.reply(embed=page2)
+
+@client.command(name="ban", description="Bans a user", usage="ban [user] <reason>")
+@commands.has_permissions(ban_members=True)
+async def ban(ctx, member: discord.Member, *, reason=None):
+        if ctx.guild.owner.id != ctx.author.id:
+            if member.top_role >= ctx.author.top_role:
+                return await ctx.send(embed=discord.Embed(title="ban", description="**`%s`**'s role is higher than yours, you cannot ban that user." % (member.name), color=discord.Colour.green()))
+        await member.ban(reason=reason)
+        await ctx.send(embed=discord.Embed(title="ban", description="Successfully banned **`%s`**" % (member.name), color=discord.Colour.green()))
+
+@client.command(name="unban", description="Unbans a user", usage="unban [user id]", aliases=["uban"])
+@commands.has_permissions(ban_members=True)
+async def unban(ctx, user):
+        try:
+            await ctx.guild.unban(discord.Object(id=user))
+            await ctx.send(embed=discord.Embed(title="unban", description="Successfully unbanned **`%s`**" % (user), color=discord.Colour.green()))
+        except Exception:
+            await ctx.send(embed=discord.Embed(title="unban", description="Failed to unban **`%s`**" % (user), color=discord.Colour.green()))
+
+
+@client.command(name="kick", description="Kicks a user", usage="kick [user] <reason>")
+@commands.has_permissions(kick_members=True)
+async def kick(ctx, member: discord.Member, *, reason=None):
+        try:
+            await member.kick(reason=reason)
+            await ctx.send(embed=discord.Embed(title="kick", description="Successfully kicked **`%s`**" % (member.name), color=discord.Colour.green()))
+        except Exception:
+            await ctx.send(embed=discord.Embed(title="kick", description="Failed to kick **`%s`**" % (member.name), color=discord.Colour.green()))
+
+
+@client.command(aliases=["massunban"])
+@commands.has_permissions(administrator=True)
+async def unbanalll(ctx):
+    guild = ctx.guild
+    banlist = await guild.bans()
+    await ctx.send('Unbanning {} members'.format(len(banlist)))
+    for users in banlist:
+            await ctx.guild.unban(user=users.user)
+
+@client.command()
+async def info(ctx):
+    await ctx.send(embed=discord.Embed(title="Proton Info", description=f"{len(client.guilds)} servers, {len(client.users)} users | Database is connected"))  
+
+@client.command()
+async def ping(ctx):
+  message = await ctx.send(content="`Pinging...`")
+  await message.edit(content=f"Latency is `{round(client.latency * 1000)}ms`")
+
+@client.command()
+async def features(ctx, member: discord.Member = None):
+  embed = discord.Embed(color=discord.Colour.green()) 
+  embed.set_author(name='Proton',icon_url=f'{proton}') 
+  embed.set_thumbnail(url=f"{proton}")
+  embed.add_field( name=f"<a:P_badge1:930103017099903006>**__Features__**", value=f" <a:P_enable:930105263934033971> `Anti Guild Update` \n<a:P_enable:930105263934033971> `Anti Channel Create` \n<a:P_enable:930105263934033971> `Anti Channel Delete` \n<a:P_enable:930105263934033971> `Anti Channel Update` \n<a:P_enable:930105263934033971> `Anti Role Create` \n<a:P_enable:930105263934033971> `Anti Role Delete` \n<a:P_enable:930105263934033971> `Anti Role Update` \n<a:P_enable:930105263934033971> `Anti Ban` \n<a:P_enable:930105263934033971> `Anti Kick` \n<a:P_enable:930105263934033971> `Anti Webhook`\n<a:P_enable:930105263934033971> `Anti Link`\n<a:P_enable:930105263934033971> `Anti Emoji` \n<a:P_enable:930105263934033971> `Anti Member Update`\n \n <:P_moderation:930103211002572880> **__SETTINGS__** \n <a:P_enable:930105263934033971> `LIMITS =1` \n <a:P_enable:930105263934033971> `PUNISHMENT =BAN` \n<a:P_enable:930105263934033971>`RECOVER = TRUE`",inline=True)
+
+  await ctx.reply(embed=embed)
+
+client.run(token)
